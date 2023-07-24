@@ -1,0 +1,1 @@
+Kalkulator prowizji na allegro.
