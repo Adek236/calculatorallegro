@@ -49,10 +49,11 @@
               <input
                 type="number"
                 class="form-control"
-                id="auction-price"
+                id="purchase-price"
                 placeholder="Price"
+                value="0"
               />
-              <label for="auction-price" class="form-label"
+              <label for="purchase-price" class="form-label"
                 >Kwota zakupu (netto zł)</label
               >
             </div>
@@ -66,17 +67,17 @@
           </div>
         </div>
 
-        <div class="row">
+        <div id="profit-box" class="row d-none">
           <div class="col">
             <div class="form-floating mb-2">
               <input
                 type="number"
                 class="form-control"
-                id="profit"
+                id="profit-min"
                 placeholder="Profit"
                 readonly
               />
-              <label for="profit" class="form-label">Zysk min (zł)</label>
+              <label for="profit-min" class="form-label">Zysk min (zł)</label>
             </div>
           </div>
           <div class="col">
@@ -84,12 +85,24 @@
               <input
                 type="number"
                 class="form-control"
-                id="profit"
+                id="profit-max"
                 placeholder="Profit"
               />
-              <label for="profit" class="form-label">Zysk max (zł)</label>
+              <label for="profit-max" class="form-label">Zysk max (zł)</label>
             </div>
           </div>
+        </div>
+        <div id="cost-box" class="form-floating mb-2">
+          <input
+            type="number"
+            class="form-control"
+            id="cost"
+            placeholder="Cost"
+            readonly
+          />
+          <label for="cost" class="form-label"
+            >Koszt (zł)</label
+          >
         </div>
         <div class="row mb-2">
           <div class="col d-flex justify-content-center">
@@ -97,10 +110,10 @@
               <input
                 type="checkbox"
                 class="form-check-input"
-                id="add-delivery"
+                id="is-sub"
                 checked
               />
-              <label for="add-delivery" class="form-check-box"
+              <label for="is-sub" class="form-check-box"
                 >Posiadam abonament?</label
               >
             </div>
@@ -116,9 +129,9 @@
           </div>
           <div class="col">
             <select name="category" id="category" class="form-select">
-              <option value="sucha-karma">Sucha karma 6,15%</option>
-              <option value="akwarystyka">Akwarystyka 9%</option>
-              <option value="gryzon">Gryzoń 12%</option>
+              <option value="0.0615">Sucha karma 6,15%</option>
+              <option value="9">Akwarystyka 9%</option>
+              <option value="12">Gryzoń 12%</option>
             </select>
           </div>
         </div>
@@ -128,11 +141,11 @@
           </div>
           <div class="col">
             <select name="wage" id="wage" class="form-select">
-              <option value="waga10">0-10kg</option>
-              <option value="waga15">10-15kg</option>
-              <option value="waga20">15-20kg</option>
-              <option value="waga25">20-25kg</option>
-              <option value="waga315">25-31,5kg</option>
+              <option value="0">0-10kg</option>
+              <option value="1.5">10-15kg</option>
+              <option value="2">15-20kg</option>
+              <option value="3">20-25kg</option>
+              <option value="4">25-31,5kg</option>
             </select>
           </div>
         </div>
@@ -148,8 +161,9 @@
               id="delivery-price"
               class="form-select"
             >
-              <option value="dpd-kurier">DPD Kurier 13,99zł</option>
-              <option value="inpost-paczkomat">Inpost Paczkomat 9,99zł</option>
+              <option value="0">Smart 0zł</option>
+              <option value="13.99">DPD Kurier 13,99zł</option>
+              <option value="9.99">Inpost Paczkomat 9,99zł</option>
             </select>
           </div>
         </div>
