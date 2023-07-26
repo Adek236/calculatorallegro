@@ -21,14 +21,17 @@
   <body class="bg-light-subtle">
     <div class="container p-3 d-flex flex-column">
       <h1 class="text-center p-2">Kalkulator sprzedaży Allegro</h1>
-      <a
-        href="/"
-        class="btn btn-primary mb-2 align-self-center"
-        style="width: 100px"
-      >
-        Refresh
-      </a>
       <form>
+        <div class="row mb-2 d-flex justify-content-center">
+          <div class="col-auto">
+            <a href="/" class="btn btn-primary" style="width: 100px">
+              Odśwież
+            </a>
+          </div>
+          <div class="col-auto">
+            <button style="width: 100px" class="btn btn-primary">Zapisz</button>
+          </div>
+        </div>
         <div class="form-floating mb-2">
           <input
             type="number"
@@ -40,17 +43,29 @@
             >Cena sprzedaży (zł)</label
           >
         </div>
-        <div class="form-floating mb-2">
-          <input
-            type="number"
-            class="form-control"
-            id="auction-price"
-            placeholder="Price"
-          />
-          <label for="auction-price" class="form-label"
-            >Kwota zakupu (netto zł)</label
-          >
+        <div class="row mb-2">
+          <div class="col-auto">
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="auction-price"
+                placeholder="Price"
+              />
+              <label for="auction-price" class="form-label"
+                >Kwota zakupu (netto zł)</label
+              >
+            </div>
+          </div>
+          <div class="col d-flex align-items-center justify-content-center">
+            <label for="vat" class="form-label m-2">VAT:</label>
+            <select name="vat" id="vat" class="form-select h-100">
+              <option value="23">23%</option>
+              <option value="8">8%</option>
+            </select>
+          </div>
         </div>
+
         <div class="row">
           <div class="col">
             <div class="form-floating mb-2">
@@ -77,24 +92,126 @@
           </div>
         </div>
         <div class="row mb-2">
-            <div class="col d-flex justify-content-center">
-
-                <div class="form-check form-switch">
-                    <input type="checkbox" class="form-check-input" id="add-delivery" checked>
-                    <label for="add-delivery" class="form-check-box">Doliczyć przesyłkę?</label>
-                </div>
-                <!-- <div class="form-check form-switch form-check-inline">
+          <div class="col d-flex justify-content-center">
+            <div class="form-check form-switch">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="add-delivery"
+                checked
+              />
+              <label for="add-delivery" class="form-check-box"
+                >Posiadam abonament?</label
+              >
+            </div>
+             <!-- <div class="form-check form-switch form-check-inline">
                     <input type="checkbox" class="form-check-input" id="add-cod">
                     <label for="add-cod" class="form-check-box">Doliczyć pobranie?</label>
-                </div> -->
-            </div>
+                </div>  -->
+          </div>
         </div>
-        <label for="delivery-price" class="form-label">Koszt transportu:</label>
-        <select name="delivery-price" id="delivery-price" class="form-select">
-            <option value="dpd-kurier">DPD Kurier 13,99zł</option>
-            <option value="inpost-paczkomat">Inpost Paczkomat 9,99zł</option>
-        </select>
+        <div class="row mb-2 d-flex flex-column">
+          <div class="col">
+            <label for="category" class="form-label">Kategoria:</label>
+          </div>
+          <div class="col">
+            <select name="category" id="category" class="form-select">
+              <option value="sucha-karma">Sucha karma 6,15%</option>
+              <option value="akwarystyka">Akwarystyka 9%</option>
+              <option value="gryzon">Gryzoń 12%</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-2 d-flex flex-column">
+          <div class="col">
+            <label for="wage" class="form-label">Waga:</label>
+          </div>
+          <div class="col">
+            <select name="wage" id="wage" class="form-select">
+              <option value="waga10">0-10kg</option>
+              <option value="waga15">10-15kg</option>
+              <option value="waga20">15-20kg</option>
+              <option value="waga25">20-25kg</option>
+              <option value="waga315">25-31,5kg</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-2 d-flex flex-column">
+          <div class="col">
+            <label for="delivery-price" class="form-label"
+              >Koszt transportu:</label
+            >
+          </div>
+          <div class="col">
+            <select
+              name="delivery-price"
+              id="delivery-price"
+              class="form-select"
+            >
+              <option value="dpd-kurier">DPD Kurier 13,99zł</option>
+              <option value="inpost-paczkomat">Inpost Paczkomat 9,99zł</option>
+            </select>
+          </div>
+        </div>
       </form>
+      <table class="table table-sm mt-3 table-striped table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Kwota</th>
+            <th scope="col">zł</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr>
+            <td scope="row">1</td>
+            <td>Zakup towaru + VAT</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td scope="row">2</td>
+            <td>Marża Allegro</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td scope="row">3</td>
+            <td>Dodatkowa waga</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td scope="row">4</td>
+            <td>Transport</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td scope="row">5</td>
+            <td>Abonament</td>
+            <td>5</td>
+          </tr>
+        </tbody>
+        <tbody class="table-group-divider">
+          <tr class="table-danger">
+            <td scope="row">6</td>
+            <td>Razem koszt</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td scope="row">7</td>
+            <td>Cena sprzedaży</td>
+            <td>5</td>
+          </tr>
+          <tr class="table-success">
+            <td scope="row">8</td>
+            <td>Zysk min</td>
+            <td>5</td>
+          </tr>
+          <tr class="table-success">
+            <td scope="row">9</td>
+            <td>Zysk max</td>
+            <td>5</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>
