@@ -61,8 +61,8 @@
           <div class="col d-flex align-items-center justify-content-center">
             <label for="vat" class="form-label m-2">VAT:</label>
             <select name="vat" id="vat" class="form-select h-100">
-              <option value="23">23%</option>
-              <option value="8">8%</option>
+              <option value="0.23">23%</option>
+              <option value="0.08">8%</option>
             </select>
           </div>
         </div>
@@ -130,7 +130,7 @@
           <div class="col">
             <select name="category" id="category" class="form-select">
               <option value="0.0615">Sucha karma 6,15%</option>
-              <option value="9">Akwarystyka 9%</option>
+              <option value="0.1169">Akwarystyka 11.69%</option>
               <option value="12">Gryzoń 12%</option>
             </select>
           </div>
@@ -151,11 +151,11 @@
         </div>
         <div class="row mb-2 d-flex flex-column">
           <div class="col">
-            <label for="delivery-price" class="form-label"
+            <label id="delivery-price-label" for="delivery-price" class="form-label"
               >Koszt transportu:</label
             >
           </div>
-          <div class="col">
+          <div class="col d-flex">
             <select
               name="delivery-price"
               id="delivery-price"
@@ -163,7 +163,29 @@
             >
               <option value="0">Smart 0zł</option>
               <option value="13.99">DPD Kurier 13,99zł</option>
+              <option value="13.99">DPD Kurier 13,99zł</option>
               <option value="9.99">Inpost Paczkomat 9,99zł</option>
+            </select>
+          
+          
+            <select
+              name="delivery-price-min"
+              id="delivery-price-min"
+              class="form-select d-none"
+              disabled
+            >
+              <option value="0">Smart 0zł</option>
+            </select>
+          
+          
+            <select
+              name="delivery-price-max"
+              id="delivery-price-max"
+              class="form-select d-none"
+            >
+            <option value="13.99">DPD Kurier 13,99zł</option>
+            <option value="18.99">DPD Kurier Pobranie 18,99zł</option>
+            <option value="9.99">Inpost Paczkomat 9,99zł</option>
             </select>
           </div>
         </div>
