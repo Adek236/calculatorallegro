@@ -28,15 +28,16 @@ PurchasePrice.addEventListener("change", purchasePriceToggle);
 const DeliveryPriceScope = {
   // Delivery cost scope based at allegro dpd transport 'smart'
   // its maximum cost of transport
-  "40,49.99": "2.09",
-  "50,59.99": "2.49",
-  "60,69.99": "2.79",
-  "70,79.99": "3.49",
-  "80,99.99": "4.99",
-  "100,149.99": "5.99",
-  "150,199.99": "6.99",
-  "200,299.99": "9.49",
-  "300,999.99": "10.99",
+  "0,39.99": 0,
+  "40,49.99": 2.09,
+  "50,59.99": 2.49,
+  "60,69.99": 2.79,
+  "70,79.99": 3.49,
+  "80,99.99": 4.99,
+  "100,149.99": 5.99,
+  "150,199.99": 6.99,
+  "200,299.99": 9.49,
+  "300,999.99": 10.99,
 };
 
 // Functions
@@ -51,7 +52,7 @@ function convertByAuctionPrice() {
   // Portal max margin cost minimum is 0.31, if is more expensive so go on that cost
   const portalMarginCostMax =
   calculatePortalMarginCostMax >= 0.31 ? calculatePortalMarginCostMax : 0.31;
-  const costCalculateMax = addIsSubCost + calculateDeliveryPrice(AuctionPrice.value) + portalMarginCostMax + Number(Wage.value)
+  const costCalculateMax = addIsSubCost + calculateDeliveryCost(AuctionPrice.value) + portalMarginCostMax + Number(Wage.value)
 
    // Portal Min margin cost
    const calculatePortalMarginCostMin = (Number(AuctionPrice.value) + Number(DeliveryPriceMax.value)) *
@@ -59,7 +60,7 @@ function convertByAuctionPrice() {
    // Portal Min margin cost minimum is 0.31, if is more expensive so go on that cost
    const portalMarginCostMin =
    calculatePortalMarginCostMin >= 0.31 ? calculatePortalMarginCostMin : 0.31;
-   const costCalculateMin = addIsSubCost + calculateDeliveryPrice(AuctionPrice.value) + portalMarginCostMin + Number(Wage.value)
+   const costCalculateMin = addIsSubCost + calculateDeliveryCost(AuctionPrice.value) + portalMarginCostMin + Number(Wage.value)
 
     const purchasePriceWithVat = Number(PurchasePrice.value)+(Number(PurchasePrice.value)*Number(VAT.value));
 
@@ -81,7 +82,7 @@ function convertByAuctionPrice() {
   const deliveryCost =
     Number(DeliveryPrice.value) > 0
       ? 0
-      : calculateDeliveryPrice(AuctionPrice.value);
+      : calculateDeliveryCost(AuctionPrice.value);
 
 
   // Portal margin cost
@@ -104,9 +105,9 @@ function convertByProfitMax() {
   AuctionPrice.value = ProfitMax.value;
 }
 
-function calculateDeliveryPrice(amount) {
+function calculateDeliveryCost(amount) {
   // If amount less than 39.99 is no additional cost
-  if (amount <= 39.99) return 0;
+  if (amount <= 39.99) return DeliveryPriceScope["0,39.99"];
   // Additional delivery cost based at auction price
   const result = Object.keys(DeliveryPriceScope).find((el) => {
     return (
