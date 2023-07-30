@@ -91,12 +91,12 @@ function convertByAuctionPrice() {
   // TODO: SOME BUGGY HERE with delivery cost
 
   // Calculate delivery cost
-  const deliveryCost =
-    Number(DeliveryPrice.value) > 0
-      ? 0
-      : calculateDeliveryPrice(AuctionPrice.value);
+  // const deliveryCost =
+  //   Number(DeliveryPrice.value) > 0
+  //     ? 0
+  //     : calculateDeliveryPrice(AuctionPrice.value);
   
-  const costCalculateResult = costCalculate(deliveryCost);
+  const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
 
   // Update UI (need to improve, some bugs with round up)
   Cost.value = costCalculateResult.toFixed(2);
