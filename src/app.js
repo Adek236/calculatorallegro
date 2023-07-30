@@ -21,7 +21,7 @@ PurchasePrice.addEventListener("click", selectValueAfterClick);
 ProfitMax.addEventListener("click", selectValueAfterClick);
 
 AuctionPrice.addEventListener("change", convertByAuctionPrice);
-ProfitMax.addEventListener("change", convertByProfitMax);
+// ProfitMax.addEventListener("change", convertByProfitMax);
 PurchasePrice.addEventListener("change", purchasePriceToggle);
 
 // Data
@@ -41,38 +41,42 @@ const DeliveryPriceScope = {
 };
 
 // Functions
-function convertByAuctionPrice() {
+function costCalculate(deliveryCost = 0) {
   // Subscribe additional cost
   const addIsSubCost = IsSub.checked ? 0 : 1;
+  // Portal margin cost
+  const calculatePortalMarginCost =
+    (Number(AuctionPrice.value) + Number(deliveryCost)) *
+    Number(Category.value);
+  // Portal max margin cost minimum is 0.31, if is more expensive so go on that cost
+  const portalMarginCost =
+    calculatePortalMarginCost >= 0.31 ? calculatePortalMarginCost : 0.31;
+  return (
+    addIsSubCost +
+    calculateDeliveryPrice(AuctionPrice.value) +
+    portalMarginCost +
+    Number(Wage.value)
+  );
+}
 
+function convertByAuctionPrice() {
   // If purchase price is available
   if (PurchasePrice.value > 0) {
-    // Portal max margin cost
-  const calculatePortalMarginCostMax = (Number(AuctionPrice.value)*Number(Category.value));
-  // Portal max margin cost minimum is 0.31, if is more expensive so go on that cost
-  const portalMarginCostMax =
-  calculatePortalMarginCostMax >= 0.31 ? calculatePortalMarginCostMax : 0.31;
-  const costCalculateMax = addIsSubCost + calculateDeliveryPrice(AuctionPrice.value) + portalMarginCostMax + Number(Wage.value)
-
-   // Portal Min margin cost
-   const calculatePortalMarginCostMin = (Number(AuctionPrice.value) + Number(DeliveryPriceMax.value)) *
-   Number(Category.value);
-   // Portal Min margin cost minimum is 0.31, if is more expensive so go on that cost
-   const portalMarginCostMin =
-   calculatePortalMarginCostMin >= 0.31 ? calculatePortalMarginCostMin : 0.31;
-   const costCalculateMin = addIsSubCost + calculateDeliveryPrice(AuctionPrice.value) + portalMarginCostMin + Number(Wage.value)
-
-    const purchasePriceWithVat = Number(PurchasePrice.value)+(Number(PurchasePrice.value)*Number(VAT.value));
-
-    const profitMaxCalculate = Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax;
-    const profitMinCalculate = Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMin;
-
-
+    const costCalculateMax = costCalculate();
+    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value));
+    // Add vat to purchase price
+    const purchasePriceWithVat =
+      Number(PurchasePrice.value) +
+      Number(PurchasePrice.value) * Number(VAT.value);
+    const profitMaxCalculate =
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax;
+    const profitMinCalculate =
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMin;
 
     // Update UI (need to improve, some bugs with round up)
     ProfitMin.value = profitMinCalculate.toFixed(2);
     ProfitMax.value = profitMaxCalculate.toFixed(2);
-    
+
     return;
   }
 
@@ -84,30 +88,16 @@ function convertByAuctionPrice() {
       ? 0
       : calculateDeliveryPrice(AuctionPrice.value);
 
+  console.log(deliveryCost);
 
-  // Portal margin cost
-  const calculatePortalMarginCost =
-    (Number(AuctionPrice.value) + Number(DeliveryPrice.value)) *
-    Number(Category.value);
-  // Portal margin cost minimum is 0.31, if is more expensive so go on that cost
-  const portalMarginCost =
-    calculatePortalMarginCost >= 0.31 ? calculatePortalMarginCost : 0.31;
-
-  // Total cost
-  const costCalculate =
-    portalMarginCost + Number(Wage.value) + Number(deliveryCost) + addIsSubCost;
+  const costCalculateResult = costCalculate(deliveryCost);
 
   // Update UI (need to improve, some bugs with round up)
-  Cost.value = costCalculate.toFixed(2);
-}
-
-function convertByProfitMax() {
-  AuctionPrice.value = ProfitMax.value;
+  Cost.value = costCalculateResult.toFixed(2);
 }
 
 function calculateDeliveryPrice(amount) {
   // If amount less than 39.99 is no additional cost
-  // if (amount <= 39.99) return 0;
   // Additional delivery cost based at auction price
   const result = Object.keys(DeliveryPriceScope).find((el) => {
     return (
