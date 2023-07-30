@@ -23,6 +23,12 @@ ProfitMax.addEventListener("click", selectValueAfterClick);
 AuctionPrice.addEventListener("change", convertByAuctionPrice);
 // ProfitMax.addEventListener("change", convertByProfitMax);
 PurchasePrice.addEventListener("change", purchasePriceToggle);
+VAT.addEventListener("change", convertByAuctionPrice);
+IsSub.addEventListener("change", convertByAuctionPrice);
+Wage.addEventListener("change", convertByAuctionPrice);
+Category.addEventListener("change", convertByAuctionPrice);
+DeliveryPrice.addEventListener("change", convertByAuctionPrice);
+DeliveryPriceMax.addEventListener("change", convertByAuctionPrice);
 
 // Data
 const DeliveryPriceScope = {
@@ -82,14 +88,14 @@ function convertByAuctionPrice() {
 
   // If purchase price is not available
 
+  // TODO: SOME BUGGY HERE with delivery cost
+
   // Calculate delivery cost
   const deliveryCost =
     Number(DeliveryPrice.value) > 0
       ? 0
       : calculateDeliveryPrice(AuctionPrice.value);
-
-  console.log(deliveryCost);
-
+  
   const costCalculateResult = costCalculate(deliveryCost);
 
   // Update UI (need to improve, some bugs with round up)
@@ -121,6 +127,7 @@ function purchasePriceToggle() {
     DeliveryPriceMax.classList.remove("d-none");
     DeliveryPriceMax.classList.add("d-flex");
     DeliveryPriceLabel.innerText = "Koszt transportu (min - max):";
+    convertByAuctionPrice();
     return;
   }
   // If not show only cost and just delivery
@@ -134,6 +141,7 @@ function purchasePriceToggle() {
   DeliveryPriceMax.classList.add("d-none");
   DeliveryPriceMax.classList.remove("d-flex");
   DeliveryPriceLabel.innerText = "Koszt transportu:";
+  convertByAuctionPrice();
 }
 
 function selectValueAfterClick() {
