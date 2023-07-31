@@ -68,6 +68,7 @@ function costCalculate(deliveryCost = 0) {
 }
 
 function convertByAuctionPrice() {
+  // TODO: Buggy here
   // If purchase price is available
   if (PurchasePrice.value > 0) {
     const costCalculateMax = costCalculate();
@@ -89,13 +90,6 @@ function convertByAuctionPrice() {
   }
 
   // If purchase price is not available
-
-  // // Calculate delivery cost
-  // const deliveryCost =
-  //   Number(DeliveryPrice.value) > 0
-  //     ? 0
-  //     : calculateDeliverySmartCost(AuctionPrice.value);
-  
   const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
 
   // Update UI (need to improve, some bugs with round up)
