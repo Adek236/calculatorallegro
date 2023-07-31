@@ -57,9 +57,11 @@ function costCalculate(deliveryCost = 0) {
   // Portal max margin cost minimum is 0.31, if is more expensive so go on that cost
   const portalMarginCost =
     calculatePortalMarginCost >= 0.31 ? calculatePortalMarginCost : 0.31;
+    // Delivery cost - if smart calculate additional cost
+    const deliveryCostFinal = deliveryCost > 0 ? 0 : calculateDeliverySmartCost(AuctionPrice.value);
   return (
     addIsSubCost +
-    calculateDeliveryPrice(AuctionPrice.value) +
+    deliveryCostFinal +
     portalMarginCost +
     Number(Wage.value)
   );
@@ -73,7 +75,7 @@ function convertByAuctionPrice() {
     // Add vat to purchase price
     const purchasePriceWithVat =
       Number(PurchasePrice.value) +
-      Number(PurchasePrice.value) * Number(VAT.value);
+      (Number(PurchasePrice.value) * Number(VAT.value));
     const profitMaxCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax;
     const profitMinCalculate =
@@ -88,13 +90,11 @@ function convertByAuctionPrice() {
 
   // If purchase price is not available
 
-  // TODO: SOME BUGGY HERE with delivery cost
-
-  // Calculate delivery cost
+  // // Calculate delivery cost
   // const deliveryCost =
   //   Number(DeliveryPrice.value) > 0
   //     ? 0
-  //     : calculateDeliveryPrice(AuctionPrice.value);
+  //     : calculateDeliverySmartCost(AuctionPrice.value);
   
   const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
 
@@ -102,7 +102,7 @@ function convertByAuctionPrice() {
   Cost.value = costCalculateResult.toFixed(2);
 }
 
-function calculateDeliveryPrice(amount) {
+function calculateDeliverySmartCost(amount) {
   // If amount less than 39.99 is no additional cost
   // Additional delivery cost based at auction price
   const result = Object.keys(DeliveryPriceScope).find((el) => {
