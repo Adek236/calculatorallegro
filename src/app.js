@@ -15,6 +15,16 @@ const DeliveryPriceMax = document.getElementById("delivery-price-max");
 const ProfitBox = document.getElementById("profit-box");
 const CostBox = document.getElementById("cost-box");
 
+const TablePurchasePrice = document.getElementById("t-purchase-price");
+const TablePortalMargin = document.getElementById("t-margin");
+const TableWage = document.getElementById("t-wage");
+const TableTransport = document.getElementById("t-transport");
+const TableSubscribe = document.getElementById("t-subscribe");
+const TableCost = document.getElementById("t-cost");
+const TableAuctionPrice = document.getElementById("t-auction-price");
+const TableProfitMin = document.getElementById("t-profit-min");
+const TableProfitMax = document.getElementById("t-profit-max");
+
 // Events
 AuctionPrice.addEventListener("click", selectValueAfterClick);
 PurchasePrice.addEventListener("click", selectValueAfterClick);
@@ -57,26 +67,29 @@ function costCalculate(deliveryCost = 0) {
   // Portal max margin cost minimum is 0.31, if is more expensive so go on that cost
   const portalMarginCost =
     calculatePortalMarginCost >= 0.31 ? calculatePortalMarginCost : 0.31;
-    // Delivery cost - if smart calculate additional cost
-    const deliveryCostFinal = deliveryCost > 0 ? 0 : calculateDeliverySmartCost(AuctionPrice.value);
-  return (
-    addIsSubCost +
-    deliveryCostFinal +
-    portalMarginCost +
-    Number(Wage.value)
-  );
+  // Delivery cost - if smart calculate additional cost
+  const deliveryCostFinal =
+    deliveryCost > 0 ? 0 : calculateDeliverySmartCost(AuctionPrice.value);
+
+  return (obj = {
+    totalCost:
+      addIsSubCost + deliveryCostFinal + portalMarginCost + Number(Wage.value),
+    subscribeCost: addIsSubCost,
+    deliveryCost: deliveryCostFinal,
+    portalMarginCost: portalMarginCost,
+    wageCost: Number(Wage.value),
+  });
 }
 
 function convertByAuctionPrice() {
-  // TODO: Buggy here
   // If purchase price is available
   if (PurchasePrice.value > 0) {
-    const costCalculateMax = costCalculate();
-    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value));
+    const costCalculateMax = costCalculate().totalCost;
+    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value)).totalCost;
     // Add vat to purchase price
     const purchasePriceWithVat =
       Number(PurchasePrice.value) +
-      (Number(PurchasePrice.value) * Number(VAT.value));
+      Number(PurchasePrice.value) * Number(VAT.value);
     const profitMaxCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax;
     const profitMinCalculate =
@@ -91,9 +104,14 @@ function convertByAuctionPrice() {
 
   // If purchase price is not available
   const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
-
   // Update UI (need to improve, some bugs with round up)
-  Cost.value = costCalculateResult.toFixed(2);
+  Cost.value = costCalculateResult.totalCost.toFixed(2);
+  TableAuctionPrice.innerText = AuctionPrice.value;
+  TablePortalMargin.innerText = costCalculateResult.portalMarginCost.toFixed(2);
+  TableWage.innerText = Wage.value;
+  TableTransport.innerText = costCalculateResult.deliveryCost;
+  TableSubscribe.innerText = costCalculateResult.subscribeCost;
+  TableCost.innerText = Cost.value;
 }
 
 function calculateDeliverySmartCost(amount) {
@@ -121,6 +139,7 @@ function purchasePriceToggle() {
     DeliveryPriceMax.classList.remove("d-none");
     DeliveryPriceMax.classList.add("d-flex");
     DeliveryPriceLabel.innerText = "Koszt transportu (min - max):";
+    VAT.disabled = false;
     convertByAuctionPrice();
     return;
   }
@@ -135,6 +154,7 @@ function purchasePriceToggle() {
   DeliveryPriceMax.classList.add("d-none");
   DeliveryPriceMax.classList.remove("d-flex");
   DeliveryPriceLabel.innerText = "Koszt transportu:";
+  VAT.disabled = true;
   convertByAuctionPrice();
 }
 

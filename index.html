@@ -38,6 +38,7 @@
             class="form-control"
             id="auction-price"
             placeholder="Price"
+            min="0"
           />
           <label for="auction-price" class="form-label"
             >Cena sprzedaży (zł)</label
@@ -52,6 +53,7 @@
                 id="purchase-price"
                 placeholder="Price"
                 value="0"
+                min="0"
               />
               <label for="purchase-price" class="form-label"
                 >Kwota zakupu (netto zł)</label
@@ -60,7 +62,7 @@
           </div>
           <div class="col d-flex align-items-center justify-content-center">
             <label for="vat" class="form-label m-2">VAT:</label>
-            <select name="vat" id="vat" class="form-select h-100">
+            <select name="vat" id="vat" class="form-select h-100" disabled>
               <option value="0.23">23%</option>
               <option value="0.08">8%</option>
             </select>
@@ -194,57 +196,57 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Kwota</th>
-            <th scope="col">zł</th>
+            <th class="w-75" scope="col">Kwota</th>
+            <th class="w-25 text-center" scope="col">zł</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
           <tr>
             <td scope="row">1</td>
             <td>Zakup towaru + VAT</td>
-            <td>5</td>
+            <td class="text-center" id="t-purchase-price">0</td>
           </tr>
           <tr>
             <td scope="row">2</td>
             <td>Marża Allegro</td>
-            <td>5</td>
+            <td class="text-center" id="t-margin">0</td>
           </tr>
           <tr>
             <td scope="row">3</td>
             <td>Dodatkowa waga</td>
-            <td>5</td>
+            <td class="text-center" id="t-wage">0</td>
           </tr>
           <tr>
             <td scope="row">4</td>
             <td>Transport</td>
-            <td>5</td>
+            <td class="text-center" id="t-transport">0</td>
           </tr>
           <tr>
             <td scope="row">5</td>
             <td>Abonament</td>
-            <td>5</td>
+            <td class="text-center" id="t-subscribe">0</td>
           </tr>
         </tbody>
         <tbody class="table-group-divider">
           <tr class="table-danger">
             <td scope="row">6</td>
             <td>Razem koszt</td>
-            <td>5</td>
+            <td class="text-center" id="t-cost">0</td>
           </tr>
           <tr>
             <td scope="row">7</td>
             <td>Cena sprzedaży</td>
-            <td>5</td>
+            <td class="text-center" id="t-auction-price">0</td>
           </tr>
           <tr class="table-success">
             <td scope="row">8</td>
             <td>Zysk min</td>
-            <td>5</td>
+            <td class="text-center" id="t-profit-min">0</td>
           </tr>
           <tr class="table-success">
             <td scope="row">9</td>
             <td>Zysk max</td>
-            <td>5</td>
+            <td class="text-center" id="t-profit-max">0</td>
           </tr>
         </tbody>
       </table>
