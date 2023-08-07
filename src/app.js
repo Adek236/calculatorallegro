@@ -84,28 +84,41 @@ function costCalculate(deliveryCost = 0) {
 function convertByAuctionPrice() {
   // If purchase price is available
   if (PurchasePrice.value > 0) {
-    const costCalculateMax = costCalculate().totalCost;
-    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value)).totalCost;
+    const costCalculateMax = costCalculate();
+    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value));
     // Add vat to purchase price
     const purchasePriceWithVat =
       Number(PurchasePrice.value) +
       Number(PurchasePrice.value) * Number(VAT.value);
     const profitMaxCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax;
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax.totalCost;
     const profitMinCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMin;
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMin.totalCost;
 
     // Update UI (need to improve, some bugs with round up)
     ProfitMin.value = profitMinCalculate.toFixed(2);
     ProfitMax.value = profitMaxCalculate.toFixed(2);
+
+    TablePurchasePrice.innerText = purchasePriceWithVat;
+    TableAuctionPrice.innerText = AuctionPrice.value;
+    TablePortalMargin.innerText = `${costCalculateMax.portalMarginCost.toFixed(2)} - ${costCalculateMin.portalMarginCost.toFixed(2)}`;
+    TableWage.innerText = Wage.value;
+    TableTransport.innerText = `${costCalculateMax.deliveryCost} - ${costCalculateMin.deliveryCost}`;
+    TableSubscribe.innerText = costCalculateMax.subscribeCost;
+    TableCost.innerText = `${costCalculateMax.totalCost.toFixed(2)} - ${costCalculateMin.totalCost.toFixed(2)}`;
+    TableProfitMin.innerText = profitMinCalculate.toFixed(2);
+    TableProfitMax.innerText = profitMaxCalculate.toFixed(2);
+    
 
     return;
   }
 
   // If purchase price is not available
   const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
+
   // Update UI (need to improve, some bugs with round up)
   Cost.value = costCalculateResult.totalCost.toFixed(2);
+
   TableAuctionPrice.innerText = AuctionPrice.value;
   TablePortalMargin.innerText = costCalculateResult.portalMarginCost.toFixed(2);
   TableWage.innerText = Wage.value;
