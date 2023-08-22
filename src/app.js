@@ -17,6 +17,7 @@ const CostBox = document.getElementById("cost-box");
 
 const TablePurchasePrice = document.getElementById("t-purchase-price");
 const TablePortalMargin = document.getElementById("t-margin");
+const TablePortalMarginPromo = document.getElementById("t-margin-promo");
 const TableWage = document.getElementById("t-wage");
 const TableTransport = document.getElementById("t-transport");
 const TableSubscribe = document.getElementById("t-subscribe");
@@ -121,6 +122,7 @@ function convertByAuctionPrice() {
 
   TableAuctionPrice.innerText = AuctionPrice.value;
   TablePortalMargin.innerText = costCalculateResult.portalMarginCost.toFixed(2);
+  TablePortalMarginPromo.innerText = (Number(TablePortalMargin.innerText)*0.75).toFixed(2);
   TableWage.innerText = Wage.value;
   TableTransport.innerText = costCalculateResult.deliveryCost;
   TableSubscribe.innerText = costCalculateResult.subscribeCost;
