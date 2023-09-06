@@ -100,15 +100,15 @@ function convertByAuctionPrice() {
     ProfitMin.value = profitMinCalculate.toFixed(2);
     ProfitMax.value = profitMaxCalculate.toFixed(2);
 
-    TablePurchasePrice.innerText = purchasePriceWithVat;
+    TablePurchasePrice.innerText = purchasePriceWithVat.toFixed(2);
     TableAuctionPrice.innerText = AuctionPrice.value;
     TablePortalMargin.innerText = `${costCalculateMax.portalMarginCost.toFixed(2)} - ${costCalculateMin.portalMarginCost.toFixed(2)}`;
     TableWage.innerText = Wage.value;
     TableTransport.innerText = `${costCalculateMax.deliveryCost} - ${costCalculateMin.deliveryCost}`;
     TableSubscribe.innerText = costCalculateMax.subscribeCost;
     TableCost.innerText = `${costCalculateMax.totalCost.toFixed(2)} - ${costCalculateMin.totalCost.toFixed(2)}`;
-    TableProfitMin.innerText = profitMinCalculate.toFixed(2);
-    TableProfitMax.innerText = profitMaxCalculate.toFixed(2);
+    TableProfitMin.innerText = `${profitMinCalculate.toFixed(2)}`;
+    TableProfitMax.innerText = `${profitMaxCalculate.toFixed(2)} (${((profitMaxCalculate - (AuctionPrice.value*0.04))).toFixed(2)})`;
     
 
     return;
