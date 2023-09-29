@@ -2,8 +2,9 @@
 const AuctionPrice = document.getElementById("auction-price");
 const PurchasePrice = document.getElementById("purchase-price");
 const VAT = document.getElementById("vat");
-const ProfitMin = document.getElementById("profit-min");
-const ProfitMax = document.getElementById("profit-max");
+const ProfitStandard = document.getElementById("profit-min");
+const ProfitSmart = document.getElementById("profit-max");
+const ProfitSmartBelow45 = document.getElementById("profit-below45");
 const Cost = document.getElementById("cost");
 const IsSub = document.getElementById("is-sub");
 const Category = document.getElementById("category");
@@ -13,7 +14,10 @@ const DeliveryPrice = document.getElementById("delivery-price");
 const DeliveryPriceMin = document.getElementById("delivery-price-min");
 const DeliveryPriceMax = document.getElementById("delivery-price-max");
 const ProfitBox = document.getElementById("profit-box");
+const ProfitBelow45Box = document.getElementById("profit-below45-box");
 const CostBox = document.getElementById("cost-box");
+const Is4PercentMinus = document.getElementById("margin-below45");
+
 
 const TablePurchasePrice = document.getElementById("t-purchase-price");
 const TablePortalMargin = document.getElementById("t-margin");
@@ -24,15 +28,18 @@ const TableSubscribe = document.getElementById("t-subscribe");
 const TableCost = document.getElementById("t-cost");
 const TableAuctionPrice = document.getElementById("t-auction-price");
 const TableProfitMin = document.getElementById("t-profit-min");
-const TableProfitMax = document.getElementById("t-profit-max");
+const TableProfitSmart = document.getElementById("t-profit-max");
+const TableProfitSmartBelow45 = document.getElementById("t-profit-below45");
+const TableProfitSmartBelow45Box = document.getElementById("t-profit-below45-box");
 
 // Events
 AuctionPrice.addEventListener("click", selectValueAfterClick);
 PurchasePrice.addEventListener("click", selectValueAfterClick);
-ProfitMax.addEventListener("click", selectValueAfterClick);
+ProfitSmart.addEventListener("click", selectValueAfterClick);
 
+Is4PercentMinus.addEventListener("change", toggleProfitSmartBelow45Box);
 AuctionPrice.addEventListener("change", convertByAuctionPrice);
-// ProfitMax.addEventListener("change", convertByProfitMax);
+// ProfitSmart.addEventListener("change", convertByProfitSmart);
 PurchasePrice.addEventListener("change", purchasePriceToggle);
 VAT.addEventListener("change", convertByAuctionPrice);
 IsSub.addEventListener("change", convertByAuctionPrice);
@@ -45,6 +52,7 @@ DeliveryPriceMax.addEventListener("change", convertByAuctionPrice);
 const DeliveryPriceScope = {
   // Delivery cost scope based at allegro dpd transport 'smart'
   // its maximum cost of transport
+  // 0,39.99 real cost is not 0 but about 4%, repaired further, here need to be 0 at now
   "0,39.99": 0,
   "40,49.99": 2.09,
   "50,59.99": 2.49,
@@ -85,31 +93,33 @@ function costCalculate(deliveryCost = 0) {
 function convertByAuctionPrice() {
   // If purchase price is available
   if (PurchasePrice.value > 0) {
-    const costCalculateMax = costCalculate();
-    const costCalculateMin = costCalculate(Number(DeliveryPriceMax.value));
+    const costCalculateSmart = costCalculate();
+    const costCalculateStandard = costCalculate(Number(DeliveryPriceMax.value));
     // Add vat to purchase price
     const purchasePriceWithVat =
       Number(PurchasePrice.value) +
       Number(PurchasePrice.value) * Number(VAT.value);
-    const profitMaxCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMax.totalCost;
-    const profitMinCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateMin.totalCost;
+    const profitSmartCalculate =
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateSmart.totalCost;
+      const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.04);
+    const profitStandardCalculate =
+      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateStandard.totalCost;
 
     // Update UI (need to improve, some bugs with round up)
-    ProfitMin.value = profitMinCalculate.toFixed(2);
-    ProfitMax.value = profitMaxCalculate.toFixed(2);
+    ProfitStandard.value = profitStandardCalculate.toFixed(2);
+    ProfitSmart.value = profitSmartCalculate.toFixed(2);
+    ProfitSmartBelow45.value = profitSmartBelow45Calculate.toFixed(2);
 
     TablePurchasePrice.innerText = purchasePriceWithVat.toFixed(2);
     TableAuctionPrice.innerText = AuctionPrice.value;
-    TablePortalMargin.innerText = `${costCalculateMax.portalMarginCost.toFixed(2)} - ${costCalculateMin.portalMarginCost.toFixed(2)}`;
+    TablePortalMargin.innerText = `${costCalculateSmart.portalMarginCost.toFixed(2)} - ${costCalculateStandard.portalMarginCost.toFixed(2)}`;
     TableWage.innerText = Wage.value;
-    TableTransport.innerText = `${costCalculateMax.deliveryCost} - ${costCalculateMin.deliveryCost}`;
-    TableSubscribe.innerText = costCalculateMax.subscribeCost;
-    TableCost.innerText = `${costCalculateMax.totalCost.toFixed(2)} - ${costCalculateMin.totalCost.toFixed(2)}`;
-    TableProfitMin.innerText = `${profitMinCalculate.toFixed(2)}`;
-    TableProfitMax.innerText = `${profitMaxCalculate.toFixed(2)} (${((profitMaxCalculate - (AuctionPrice.value*0.04))).toFixed(2)})`;
-    
+    TableTransport.innerText = `${costCalculateSmart.deliveryCost} - ${costCalculateStandard.deliveryCost}`;
+    TableSubscribe.innerText = costCalculateSmart.subscribeCost;
+    TableCost.innerText = `${costCalculateSmart.totalCost.toFixed(2)} - ${costCalculateStandard.totalCost.toFixed(2)}`;
+    TableProfitMin.innerText = `${profitStandardCalculate.toFixed(2)}`;
+    TableProfitSmart.innerText = profitSmartCalculate.toFixed(2);    
+    TableProfitSmartBelow45.innerText = profitSmartBelow45Calculate.toFixed(2);    
 
     return;
   }
@@ -155,6 +165,10 @@ function purchasePriceToggle() {
     DeliveryPriceMax.classList.add("d-flex");
     DeliveryPriceLabel.innerText = "Koszt transportu (min - max):";
     VAT.disabled = false;
+    if (Is4PercentMinus.checked) {
+      ProfitBelow45Box.classList.remove("d-none");
+      ProfitBelow45Box.classList.add("d-block");
+    }
     convertByAuctionPrice();
     return;
   }
@@ -171,6 +185,16 @@ function purchasePriceToggle() {
   DeliveryPriceLabel.innerText = "Koszt transportu:";
   VAT.disabled = true;
   convertByAuctionPrice();
+}
+
+function toggleProfitSmartBelow45Box() {
+  if (Is4PercentMinus.checked) {
+    ProfitBelow45Box.classList.remove("d-none");
+    ProfitBelow45Box.classList.add("d-block");
+    return;
+  }
+  ProfitBelow45Box.classList.remove("d-block");
+  ProfitBelow45Box.classList.add("d-none");
 }
 
 function selectValueAfterClick() {
