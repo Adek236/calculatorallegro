@@ -145,6 +145,10 @@
                   <input type="checkbox" class="form-check-input" id="margin-below45" checked>
                   <label for="margin-below45" class="form-check-box">-4%*?</label>
               </div> 
+              <div class="form-check form-switch form-check-inline">
+                <input type="checkbox" class="form-check-input" id="additional-cost">
+                <label for="additional-cost" class="form-check-box">Dodatkowy koszt? BETA</label>
+            </div> 
           </div>
         </div>
         <div class="row mb-2 d-flex flex-column">
@@ -211,6 +215,21 @@
             <option value="18.99">DPD Kurier Pobranie 18,99zł</option>
             <option value="9.99">Inpost Paczkomat 9,99zł</option>
             </select>
+          </div>
+        </div>
+        <div class="row mb-2 d-flex flex-column d-none" id="additional-cost-wrap">
+          <div class="col">
+            <label for="additional-cost-box" class="form-label"
+              >Dodatkowy koszt (zł):</label>
+            </div>
+            <div class="col">
+            <input
+            type="number"
+            class="form-control"
+            id="additional-cost-box"
+            placeholder="Additional cost"
+            value="0"
+          />
           </div>
         </div>
       </form>

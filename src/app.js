@@ -17,6 +17,11 @@ const ProfitBox = document.getElementById("profit-box");
 const ProfitBelow45Box = document.getElementById("profit-below45-box");
 const CostBox = document.getElementById("cost-box");
 const Is4PercentMinus = document.getElementById("margin-below45");
+const IsMarginPromo = document.getElementById("margin-promo");
+const IsAdditionalCost = document.getElementById("additional-cost");
+const IsAdditionalCostWrap = document.getElementById("additional-cost-wrap");
+const IsAdditionalCostBox = document.getElementById("additional-cost-box");
+
 
 
 const TablePurchasePrice = document.getElementById("t-purchase-price");
@@ -37,16 +42,21 @@ AuctionPrice.addEventListener("click", selectValueAfterClick);
 PurchasePrice.addEventListener("click", selectValueAfterClick);
 ProfitSmart.addEventListener("click", selectValueAfterClick);
 
-Is4PercentMinus.addEventListener("change", toggleProfitSmartBelow45Box);
 AuctionPrice.addEventListener("change", convertByAuctionPrice);
 // ProfitSmart.addEventListener("change", convertByProfitSmart);
 PurchasePrice.addEventListener("change", purchasePriceToggle);
 VAT.addEventListener("change", convertByAuctionPrice);
 IsSub.addEventListener("change", convertByAuctionPrice);
+IsMarginPromo.addEventListener("change", convertByAuctionPrice);
+IsAdditionalCostBox.addEventListener("change", convertByAuctionPrice);
+IsAdditionalCost.addEventListener("change", convertByAuctionPrice);
 Wage.addEventListener("change", convertByAuctionPrice);
 Category.addEventListener("change", convertByAuctionPrice);
 DeliveryPrice.addEventListener("change", convertByAuctionPrice);
 DeliveryPriceMax.addEventListener("change", convertByAuctionPrice);
+
+Is4PercentMinus.addEventListener("change", toggleProfitSmartBelow45Box);
+IsAdditionalCost.addEventListener("change", toggleAdditionalCostBox);
 
 // Data
 const DeliveryPriceScope = {
@@ -80,6 +90,7 @@ function costCalculate(deliveryCost = 0) {
   const deliveryCostFinal =
     deliveryCost > 0 ? 0 : calculateDeliverySmartCost(AuctionPrice.value);
 
+
   return (obj = {
     totalCost:
       addIsSubCost + deliveryCostFinal + portalMarginCost + Number(Wage.value),
@@ -94,45 +105,56 @@ function convertByAuctionPrice() {
   // If purchase price is available
   if (PurchasePrice.value > 0) {
     const costCalculateSmart = costCalculate();
+    const costCalculateSmartPromotion = Number(costCalculateSmart.totalCost*0.75);
+    const finalCalculateSmartCost = IsMarginPromo.checked ? costCalculateSmart.totalCost + costCalculateSmartPromotion  : costCalculateSmart.totalCost;
+    
     const costCalculateStandard = costCalculate(Number(DeliveryPriceMax.value));
+    const costCalculateStandardPromotion = Number(costCalculateStandard.totalCost*0.75);
+    const finalCalculateStandardCost = IsMarginPromo.checked ? costCalculateStandard.totalCost + costCalculateStandardPromotion  : costCalculateStandard.totalCost;
+
     // Add vat to purchase price
     const purchasePriceWithVat =
       Number(PurchasePrice.value) +
       Number(PurchasePrice.value) * Number(VAT.value);
     const profitSmartCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateSmart.totalCost;
+      Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateSmartCost;
       const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.04);
     const profitStandardCalculate =
-      Number(AuctionPrice.value) - purchasePriceWithVat - costCalculateStandard.totalCost;
+      Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateStandardCost;
+
+        // Addition cost - eg. cost of package BETA
+  const additionalCost = IsAdditionalCost.checked ? Number(IsAdditionalCostBox.value) : 0;
 
     // Update UI (need to improve, some bugs with round up)
-    ProfitStandard.value = profitStandardCalculate.toFixed(2);
-    ProfitSmart.value = profitSmartCalculate.toFixed(2);
-    ProfitSmartBelow45.value = profitSmartBelow45Calculate.toFixed(2);
+    ProfitStandard.value = profitStandardCalculate.toFixed(2)-(additionalCost);
+    ProfitSmart.value = profitSmartCalculate.toFixed(2)-additionalCost;
+    ProfitSmartBelow45.value = profitSmartBelow45Calculate.toFixed(2)-additionalCost;
 
     TablePurchasePrice.innerText = purchasePriceWithVat.toFixed(2);
     TableAuctionPrice.innerText = AuctionPrice.value;
     TablePortalMargin.innerText = `${costCalculateSmart.portalMarginCost.toFixed(2)} - ${costCalculateStandard.portalMarginCost.toFixed(2)}`;
+    TablePortalMarginPromo.innerText = `${costCalculateSmartPromotion.toFixed(2)} - ${costCalculateStandardPromotion.toFixed(2)}`;
     TableWage.innerText = Wage.value;
     TableTransport.innerText = `${costCalculateSmart.deliveryCost} - ${costCalculateStandard.deliveryCost}`;
     TableSubscribe.innerText = costCalculateSmart.subscribeCost;
-    TableCost.innerText = `${costCalculateSmart.totalCost.toFixed(2)} - ${costCalculateStandard.totalCost.toFixed(2)}`;
-    TableProfitMin.innerText = `${profitStandardCalculate.toFixed(2)}`;
-    TableProfitSmart.innerText = profitSmartCalculate.toFixed(2);    
-    TableProfitSmartBelow45.innerText = profitSmartBelow45Calculate.toFixed(2);    
+    TableCost.innerText = `${(costCalculateSmart.totalCost+additionalCost).toFixed(2)} - ${(costCalculateStandard.totalCost+additionalCost).toFixed(2)}`;
+    TableProfitMin.innerText = profitStandardCalculate.toFixed(2)-additionalCost;
+    TableProfitSmart.innerText = profitSmartCalculate.toFixed(2)-additionalCost;    
+    TableProfitSmartBelow45.innerText = profitSmartBelow45Calculate.toFixed(2)-additionalCost;    
 
     return;
   }
 
   // If purchase price is not available
   const costCalculateResult = costCalculate(Number(DeliveryPrice.value));
+  const costMarginPromotion = Number(costCalculateResult.portalMarginCost*0.75);
 
   // Update UI (need to improve, some bugs with round up)
   Cost.value = costCalculateResult.totalCost.toFixed(2);
 
   TableAuctionPrice.innerText = AuctionPrice.value;
   TablePortalMargin.innerText = costCalculateResult.portalMarginCost.toFixed(2);
-  TablePortalMarginPromo.innerText = (Number(TablePortalMargin.innerText)*0.75).toFixed(2);
+  TablePortalMarginPromo.innerText = costMarginPromotion.toFixed(2);
   TableWage.innerText = Wage.value;
   TableTransport.innerText = costCalculateResult.deliveryCost;
   TableSubscribe.innerText = costCalculateResult.subscribeCost;
@@ -195,6 +217,16 @@ function toggleProfitSmartBelow45Box() {
   }
   ProfitBelow45Box.classList.remove("d-block");
   ProfitBelow45Box.classList.add("d-none");
+}
+
+function toggleAdditionalCostBox() {
+  if (IsAdditionalCost.checked) {
+    IsAdditionalCostWrap.classList.remove("d-none");
+    IsAdditionalCostWrap.classList.add("d-block");
+    return;
+  }
+  IsAdditionalCostWrap.classList.remove("d-block");
+  IsAdditionalCostWrap.classList.add("d-none");
 }
 
 function selectValueAfterClick() {
