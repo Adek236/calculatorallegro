@@ -105,10 +105,11 @@ function convertByAuctionPrice() {
   // If purchase price is available
   if (PurchasePrice.value > 0) {
     const costCalculateSmart = costCalculate();
-    const costCalculateSmartPromotion = Number(costCalculateSmart.totalCost*0.75);
+    const costCalculateSmartPromotion = Number(costCalculateSmart.portalMarginCost*0.75);
     const finalCalculateSmartCost = IsMarginPromo.checked ? costCalculateSmart.totalCost + costCalculateSmartPromotion  : costCalculateSmart.totalCost;
     
     const costCalculateStandard = costCalculate(Number(DeliveryPriceMax.value));
+    // Need to fix promo, only 75% of cost without delivery cost, need to check? 
     const costCalculateStandardPromotion = Number(costCalculateStandard.totalCost*0.75);
     const finalCalculateStandardCost = IsMarginPromo.checked ? costCalculateStandard.totalCost + costCalculateStandardPromotion  : costCalculateStandard.totalCost;
 
