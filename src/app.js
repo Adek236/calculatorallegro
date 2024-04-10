@@ -62,17 +62,14 @@ IsAdditionalCost.addEventListener("change", toggleAdditionalCostBox);
 const DeliveryPriceScope = {
   // Delivery cost scope based at allegro dpd transport 'smart'
   // its maximum cost of transport
-  // 0,39.99 real cost is not 0 but about 4%, repaired further, here need to be 0 at now
+  // 0,39.99 real cost is not 0 but about 5,65%, repaired further, here need to be 0 at now
   "0,39.99": 0,
-  "40,49.99": 2.09,
-  "50,59.99": 2.49,
-  "60,69.99": 2.79,
-  "70,79.99": 3.49,
-  "80,99.99": 4.99,
-  "100,149.99": 5.99,
-  "150,199.99": 6.99,
-  "200,299.99": 9.49,
-  "300,999.99": 10.99,
+  "40,49.99": 2.54,
+  "50,59.99": 2.79,
+  "60,79.99": 3.19,
+  "80,119.99": 4.54,
+  "120,199.99": 7.69,
+  "200,999.99": 10.09
 };
 
 // Functions
@@ -119,7 +116,7 @@ function convertByAuctionPrice() {
       Number(PurchasePrice.value) * Number(VAT.value);
     const profitSmartCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateSmartCost;
-      const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.04);
+      const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.0565);
     const profitStandardCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateStandardCost;
 
