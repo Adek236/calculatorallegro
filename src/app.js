@@ -122,11 +122,14 @@ function convertByAuctionPrice() {
 
         // Addition cost - eg. cost of package BETA
   const additionalCost = IsAdditionalCost.checked ? Number(IsAdditionalCostBox.value) : 0;
+  const profitStandardCalculateAll = profitStandardCalculate.toFixed(2)-(additionalCost);
+  const profitSmartCalculateAll = profitSmartCalculate.toFixed(2)-additionalCost;
+  const profitSmartBelow45CalculateAll = profitSmartBelow45Calculate.toFixed(2)-additionalCost;
 
     // Update UI (need to improve, some bugs with round up)
-    ProfitStandard.value = profitStandardCalculate.toFixed(2)-(additionalCost);
-    ProfitSmart.value = profitSmartCalculate.toFixed(2)-additionalCost;
-    ProfitSmartBelow45.value = profitSmartBelow45Calculate.toFixed(2)-additionalCost;
+    ProfitStandard.value = `${profitStandardCalculateAll} (${((profitStandardCalculateAll)*100/AuctionPrice.value).toFixed(2)}%)`;
+    ProfitSmart.value = `${profitSmartCalculateAll} (${((profitSmartCalculateAll)*100/AuctionPrice.value).toFixed(2)}%)`;
+    ProfitSmartBelow45.value = `${profitSmartBelow45CalculateAll} (${((profitSmartBelow45CalculateAll)*100/AuctionPrice.value).toFixed(2)}%)`;
 
     TablePurchasePrice.innerText = purchasePriceWithVat.toFixed(2);
     TableAuctionPrice.innerText = AuctionPrice.value;
@@ -139,6 +142,16 @@ function convertByAuctionPrice() {
     TableProfitMin.innerText = profitStandardCalculate.toFixed(2)-additionalCost;
     TableProfitSmart.innerText = profitSmartCalculate.toFixed(2)-additionalCost;    
     TableProfitSmartBelow45.innerText = profitSmartBelow45Calculate.toFixed(2)-additionalCost;    
+
+    // Change color of profit
+    if (AuctionPrice.value >= 40)  {
+      // Need to rework nicely
+      ProfitSmart.style.background = "#D0F0C0"
+      ProfitSmartBelow45.style.background = "none"
+    } else {
+      ProfitSmart.style.background = "none";
+      ProfitSmartBelow45.style.background = "#D0F0C0";
+    }
 
     return;
   }
