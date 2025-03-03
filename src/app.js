@@ -62,14 +62,13 @@ IsAdditionalCost.addEventListener("change", toggleAdditionalCostBox);
 const DeliveryPriceScope = {
   // Delivery cost scope based at allegro dpd transport 'smart'
   // its maximum cost of transport
-  // 0,39.99 real cost is not 0 but about 5,65%, repaired further, here need to be 0 at now
-  "0,39.99": 0,
-  "40,49.99": 2.54,
-  "50,59.99": 2.79,
-  "60,79.99": 3.19,
-  "80,119.99": 4.54,
-  "120,199.99": 7.69,
-  "200,999.99": 10.09
+  // 0,29.99 real cost is not 0 but about 7,2%, repaired further, here need to be 0 at now
+  "0,29.99": 0,
+  "30,44.99": 1.64,
+  "45,64.99": 3.24,
+  "65,99.99": 5.04,
+  "100,149.99": 7.89,
+  "150,999.99": 10.19
 };
 
 // Functions
@@ -116,7 +115,7 @@ function convertByAuctionPrice() {
       Number(PurchasePrice.value) * Number(VAT.value);
     const profitSmartCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateSmartCost;
-      const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.0565);
+      const profitSmartBelow45Calculate = profitSmartCalculate - (Number(AuctionPrice.value)*0.072);
     const profitStandardCalculate =
       Number(AuctionPrice.value) - purchasePriceWithVat - finalCalculateStandardCost;
 
@@ -144,7 +143,7 @@ function convertByAuctionPrice() {
     TableProfitSmartBelow45.innerText = profitSmartBelow45Calculate.toFixed(2)-additionalCost;    
 
     // Change color of profit
-    if (AuctionPrice.value >= 40)  {
+    if (AuctionPrice.value >= 30)  {
       // Need to rework nicely
       ProfitSmart.style.background = "#D0F0C0"
       ProfitSmartBelow45.style.background = "none"
@@ -173,7 +172,7 @@ function convertByAuctionPrice() {
 }
 
 function calculateDeliverySmartCost(amount) {
-  // If amount less than 39.99 is no additional cost
+  // If amount less than 29.99 is no additional cost
   // Additional delivery cost based at auction price
   const result = Object.keys(DeliveryPriceScope).find((el) => {
     return (
