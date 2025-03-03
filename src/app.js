@@ -145,11 +145,11 @@ function convertByAuctionPrice() {
     // Change color of profit
     if (AuctionPrice.value >= 30)  {
       // Need to rework nicely
-      ProfitSmart.style.background = "#D0F0C0"
+      ProfitSmart.style.background = "#5c6d7f"
       ProfitSmartBelow45.style.background = "none"
     } else {
       ProfitSmart.style.background = "none";
-      ProfitSmartBelow45.style.background = "#D0F0C0";
+      ProfitSmartBelow45.style.background = "#5c6d7f";
     }
 
     return;

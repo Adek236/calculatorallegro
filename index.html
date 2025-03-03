@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,18 +20,18 @@
   </head>
   <body class="bg-light-subtle">
     <div class="container p-3 d-flex flex-column">
-      <h1 class="text-center p-2">Kalkulator sprzedaży Allegro</h1>
+      <h1 class="text-center p-5">Kalkulator sprzedaży Allegro</h1>
       <form>
-        <div class="row mb-2 d-flex justify-content-center">
+        <!-- <div class="row mb-2 d-flex justify-content-center">
           <div class="col-auto">
             <a href="/" class="btn btn-primary" style="width: 100px">
               Odśwież
             </a>
           </div>
-          <!-- <div class="col-auto">
+           <div class="col-auto">
             <button style="width: 100px" class="btn btn-primary">Zapisz</button>
-          </div> -->
-        </div>
+          </div> 
+        </div> -->
         <div class="form-floating mb-2">
           <input
             type="number"
@@ -157,8 +157,8 @@
           </div>
           <div class="col">
             <select name="category" id="category" class="form-select">
-              <option value="0.0738">Sucha karma 7.38%</option>
-              <option value="0.1292">Akwarystyka/Gryzoń 12.92%</option>
+              <option value="0.0738">Sucha/mokra karma/Przysmaki 7.38%</option>
+              <option value="0.1292">Akwarystyka/Gryzoń/Higiena 12.92%</option>
               <option value="0.1230">Oczko wodne 12.30%</option>
               <option value="0.1476">Części i akcesoria 14.76% (min do 60zł)</option>
               <option value="0.2091">Pozostałe 20.91%</option>
@@ -276,7 +276,7 @@
           </tr>
         </tbody>
         <tbody class="table-group-divider">
-          <tr class="table-danger">
+          <tr>
             <td scope="row">7</td>
             <td>Razem koszt</td>
             <td class="text-center" id="t-cost">0</td>
@@ -286,17 +286,17 @@
             <td>Cena sprzedaży</td>
             <td class="text-center" id="t-auction-price">0</td>
           </tr>
-          <tr class="table-success">
+          <tr>
             <td scope="row">9</td>
             <td>Zysk STANDARD</td>
             <td class="text-center" id="t-profit-min">0</td>
           </tr>
-          <tr class="table-success">
+          <tr>
             <td scope="row">10</td>
             <td>Zysk SMART</td>
             <td class="text-center" id="t-profit-max">0</td>
           </tr>
-          <tr class="table-success">
+          <tr>
             <td scope="row">11</td>
             <td>Zysk SMART -7,2%*</td>
             <td class="text-center" id="t-profit-below45">0</td>
